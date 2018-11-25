@@ -39,7 +39,7 @@ Finally in step 6, we combine the original image and the resulting lanes (in red
 an indication of what the machine sees and identify as lane limits during different video tests.
 
 #### Explanation of improved version of draw_lines(). Use argument mode=1 to call this option. The default mode value (mode=0) will call the initial version.
- 
+
 The draw_lines() function was modified to group the lines in two sets: left lane if the slope of the line is negative, and right lane if the slope is positive. Additionally only appropiate slopes were chosen filtering those lines that are too close to the horizontal or vertical lines.
 Once the two groups of lines have been defined (through the addition of their endpoints), least squares is used to define a unique lane in each group. Finally each line is drawn and overlaped on the original image.
 
@@ -71,13 +71,13 @@ complex global picture inside the four sided polygon. Even in the two test video
 
 ### 4. Challenge
 
-There are several aspects relative to the challenge video that makes the pipeline algorithm to perform poorly:
+There are several aspects relative to the challenge video that results in the pipeline algorithm performing poorly:
 
-1. There is a constant curve on the road. This makes detection of straight lines as right or left lane more difficult since this is not their natural shape. One potential solution here is to shorten (vertically) the region of interest so we can focus in lane detection for regions of interest where the lanes are likely straight lines.
-- Implementation: Vertically shorten the area of interest. 
-2. During the period of time between the fourth  and sixth second there is a change of terrain and shadows from trees appear over the dark terrain. The terrain changes from dark to bright (during second four), and eventually from bright to dark (during second six). The canny edge detection algorithm detects undesired edges during the changes of terrain, the shadows from the trees and areas of dark material over the bright terrain. Also the yellow lane is more difficult to detect over bright terrain.
-- Implementation: create/use an algorithm to detect and ignore shadows and changes of terrain (asfalt in this case) on the road.
-3. There is some weird brown liquid/solid area at the bottom of the video (probably the front of the car interior). The Canny edge algorithm detects edges in the transitions of pixel intensity, which have consequences in posterior processes such as Hough transform and the definition of the lanes.
-- Implementation: Remove this undesired area from region of interest since it does not add any value to the goal of lane detection. 
+1. There is a constant curve on the road. This makes detection of straight lines as right or left lane more difficult since this is not their natural shape (in curves, lane lines appear as curves). One potential solution here is to shorten (vertically) the region of interest so we can focus in lane detection for regions of interest where the lanes are likely straight lines or make a more robust algorithm where lanes can be curves.
+- Implementation: Vertically shorten the region of interest for lane detection where lanes are straight lines. 
+2. During the period of time between the fourth  and sixth second there is a change of terrain and shadows from trees appear over the dark terrain. The terrain changes from dark to bright (during second four), and eventually from bright to dark (during second six). The canny edge detection algorithm detects undesired edges during the changes of terrain, the shadows from the trees and areas of dark material over the bright terrain. Also the yellow lane is more difficult to detect over bright terrain. Light intensity has a clear impact in the algorithm. This observation is widely known in computer vision, where light exposure has a relevant influence in the performance of algorithms.
+- Implementation: create/use an algorithm to detect and ignore shadows and changes of terrain (asfalt in this case) on the road. Make the algorithm more robust during changes of light exposure.
+3. There is some weird brown liquid/solid area at the bottom of the video (probably the front of the car interior). The Canny edge algorithm detects edges in the transitions of pixel intensity, which have consequences in posterior processes such as the Hough transform and the definition of the lanes.
+- Implementation: Remove this undesired area from the region of interest since it does not add any value to the goal of lane detection. 
 
-The proposed implementations 1 and 3 where applied to the challenge. 2 will be applied in future developments. 
+The proposed implementations (1) and (3) were applied to the challenge. (2) will be applied in future developments. 
